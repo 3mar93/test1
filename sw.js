@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dialysis-cache-v5';
+const CACHE_NAME = 'dialysis-cache-v6';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -16,17 +16,34 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(ASSETS_TO_CACHE);
+            // استخدام تجميع مرن للتنزيل لضمان نجاح تشغيل وضع الأوفلاين حتى لو فشل تحميل ملف خارجي واحد
+            return Promise.allSettled(
+                ASSETS_TO_CACHE.map(url => {
+                    return cache.add(url).catch(err => {
+                        console.warn('Failed to cache asset:', url, err);
+                    });
+                })
+            );
         }).then(() => self.skipWaiting())
     );
 });
 
 self.addEventListener('activate', event => {
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('Clearing old cache:', cache);
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
 });
 
 self.addEventListener('fetch', event => {
-    // تجنب اعتراض طلبات API الخاصة بجوجل
     if (event.request.url.includes('script.google.com')) {
         return;
     }
@@ -38,7 +55,6 @@ self.addEventListener('fetch', event => {
             }
             
             return fetch(event.request).then(networkResponse => {
-                // تخزين ديناميكي للملفات الثابتة لضمان بقائها دائماً
                 if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
                     const responseClone = networkResponse.clone();
                     caches.open(CACHE_NAME).then(cache => {
@@ -47,7 +63,6 @@ self.addEventListener('fetch', event => {
                 }
                 return networkResponse;
             }).catch(() => {
-                // في حال فشل الشبكة تماماً للملاحة، نعيد الصفحة الرئيسية المخزنة
                 if (event.request.mode === 'navigate') {
                     return caches.match('./index.html') || caches.match('./');
                 }
