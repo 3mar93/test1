@@ -1720,6 +1720,21 @@
         document.body.classList.toggle('stale-data-active', !!active);
         const footer = document.getElementById('dataStaleFooter');
         if (footer) footer.classList.toggle('visible', !!active);
+        
+        const loadingPill = document.getElementById('dataLoadingPill');
+        if (loadingPill) {
+            if (!navigator.onLine) {
+                loadingPill.style.background = 'linear-gradient(135deg, #455a64 0%, #607d8b 100%)';
+                loadingPill.style.boxShadow = '0 4px 12px rgba(96, 125, 139, 0.4)';
+                const textSpan = loadingPill.querySelector('span:not(.data-loading-pill-shine)');
+                if (textSpan) textSpan.textContent = 'أنت تعمل بدون اتصال (الذاكرة المؤقتة)';
+            } else {
+                loadingPill.style.background = '';
+                loadingPill.style.boxShadow = '';
+                const textSpan = loadingPill.querySelector('span:not(.data-loading-pill-shine)');
+                if (textSpan) textSpan.textContent = 'المعلومات قيد التحميل';
+            }
+        }
         if (!active) resetRefreshDataNowBtn();
     }
 
