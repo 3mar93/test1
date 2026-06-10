@@ -1342,14 +1342,14 @@
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
                     <div class="text-center">
                         <label class="small fw-bold text-muted mb-1 d-block">دقائق</label>
-                        <!-- تم تغيير النوع إلى text لمنع حظر الأرقام العربية من المتصفح مع إبقاء لوحة أرقام الهاتف نشطة -->
-                        <input type="text" id="timerMinutes" inputmode="numeric" class="form-control form-control-sm fw-bold text-center" style="width: 70px;" placeholder="">
+                        <!-- تم تمكين خصائص حظر ومنع ظهور مقترحات الكيبورد تماماً للهواتف -->
+                        <input type="text" id="timerMinutes" inputmode="numeric" class="form-control form-control-sm fw-bold text-center" style="width: 70px;" placeholder="" autocomplete="one-time-code" autocorrect="off" autocapitalize="none" spellcheck="false">
                     </div>
                     <span class="fw-bold fs-4 mt-3">:</span>
                     <div class="text-center">
                         <label class="small fw-bold text-muted mb-1 d-block">ساعات</label>
-                        <!-- تم تغيير النوع إلى text لمنع حظر الأرقام العربية من المتصفح مع إبقاء لوحة أرقام الهاتف نشطة -->
-                        <input type="text" id="timerHours" inputmode="numeric" class="form-control form-control-sm fw-bold text-center" style="width: 70px;" placeholder="">
+                        <!-- تم تمكين خصائص حظر ومنع ظهور مقترحات الكيبورد تماماً للهواتف -->
+                        <input type="text" id="timerHours" inputmode="numeric" class="form-control form-control-sm fw-bold text-center" style="width: 70px;" placeholder="" autocomplete="one-time-code" autocorrect="off" autocapitalize="none" spellcheck="false">
                     </div>
                 </div>
 
@@ -1358,7 +1358,7 @@
                         <i class="fas fa-play me-2"></i> تشغيل المؤقت
                     </button>
                     <button type="button" id="endSessionBtn" onclick="executeEndSession()" class="btn btn-dark fw-bold py-2 w-100" style="border-radius: 10px; display: none;">
-                        <i class="fas fa-hourglass-end me-2"></i> إنهاء الجلسة فَوْراً
+                        <i class="fas fa-hourglass-end me-2"></i> إنهاء الجلسة
                     </button>
                     <button type="button" id="stopTimerBtn" onclick="executeStopTimer()" class="btn btn-danger fw-bold py-2 w-100" style="border-radius: 10px; display: none;">
                         <i class="fas fa-stop me-2"></i> إيقاف وإلغاء المؤقت
@@ -1730,7 +1730,7 @@
                 loadingPill.style.background = 'linear-gradient(135deg, #455a64 0%, #607d8b 100%)';
                 loadingPill.style.boxShadow = '0 4px 12px rgba(96, 125, 139, 0.4)';
                 const textSpan = loadingPill.querySelector('span:not(.data-loading-pill-shine)');
-                if (textSpan) textSpan.textContent = 'أنت تعمل بدون اتصال (الذاكرة المؤقتة)';
+                if (textSpan) textSpan.textContent = 'وضع عدم الاتصال';
             } else {
                 loadingPill.style.background = '';
                 loadingPill.style.boxShadow = '';
