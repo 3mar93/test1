@@ -1680,7 +1680,6 @@
             }
             // تسجيل ملف التثبيت والتخزين المحلي المخصص للعمل بالكامل دون اتصال بالإنترنت
             if ('serviceWorker' in navigator) {
-                navigator.scriptUrl = './sw.js';
                 navigator.serviceWorker.register('./sw.js').catch(function() { /* تجاهل */ });
             }
         } catch (e) { /* تجاهل */ }
